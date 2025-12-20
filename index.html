@@ -1,10 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta http-equiv="refresh" content="0; url=reset-password.html">
-    <title>FreshPath Auth</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshPath - Password Reset</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        h1 { margin: 0 0 10px 0; }
+        p { opacity: 0.9; font-size: 14px; }
+    </style>
 </head>
 <body>
-    <p>Redirecting...</p>
+    <div class="container">
+        <h1>Password Reset</h1>
+        <div class="spinner"></div>
+        <p id="status">Checking reset link...</p>
+    </div>
+
+    <script>
+        const hash = window.location.hash;
+        const queryParams = window.location.search;
+        const statusEl = document.getElementById('status');
+        
+        const tokens = hash || queryParams;
+        
+        if (tokens) {
+            const appDeepLink = 'freshpath://update-password' + tokens;
+            statusEl.innerHTML = 'Redirecting to FreshPath app...';
+            
+            setTimeout(() => {
+                window.location.href = appDeepLink;
+            }, 1000);
+            
+            setTimeout(() => {
+                statusEl.innerHTML = 'Please open the FreshPath app to continue.<br><small>If the app didn\'t open, please open it manually.</small>';
+            }, 4000);
+        } else {
+            statusEl.innerHTML = 'Invalid reset link.<br><small>URL: ' + window.location.href + '</small>';
+        }
+    </script>
 </body>
 </html>
